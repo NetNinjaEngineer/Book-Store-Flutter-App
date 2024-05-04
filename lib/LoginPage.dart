@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:helloworld/AdminHomeScreen.dart';
 import 'package:helloworld/BookListScreen.dart';
 import 'package:helloworld/TokenService.dart';
 import 'package:http/http.dart' as http;
@@ -48,14 +49,23 @@ class _LoginPageState extends State<LoginPage> {
       // store the token
       await TokenService().storeToken(responseData['token']);
 
-      // route user to home page
-      Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(
-          builder: (context) => const BookListScreen(),
-        ),
-      );
+      if (responseData['roles'].toString().contains('Admin')) {
+        Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AdminHomeScreen(),
+            ));
+      } else {
+        // route user to home page
+        Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+            builder: (context) => const BookListScreen(),
+          ),
+        );
+      }
     } else {
       // Login failed
       // ignore: use_build_context_synchronously
@@ -106,7 +116,8 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const RegisterPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterPage()),
                     );
                   },
                   child: const Text('Sign Up'),

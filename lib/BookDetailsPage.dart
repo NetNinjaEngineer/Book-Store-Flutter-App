@@ -9,15 +9,14 @@ class BookDetailsPage extends StatelessWidget {
   final int publicationYear;
   final double price;
 
-  BookDetailsPage({
-    required this.bookId,
-    required this.authors,
-    required this.genre,
-    required this.imageUrl,
-    required this.title,
-    required this.publicationYear,
-    required this.price
-  });
+  BookDetailsPage(
+      {required this.bookId,
+      required this.authors,
+      required this.genre,
+      required this.imageUrl,
+      required this.title,
+      required this.publicationYear,
+      required this.price});
 
   @override
   Widget build(BuildContext context) {

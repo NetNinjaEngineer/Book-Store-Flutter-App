@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helloworld/AdminHomeScreen.dart';
 import 'package:helloworld/LoginPage.dart';
 
 void main() {
@@ -11,12 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,  
+        debugShowCheckedModeBanner: false,
         title: 'Login & Book App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const LoginPage()
-      );
+        home: const LoginPage());
   }
 }
