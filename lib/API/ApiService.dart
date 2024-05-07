@@ -1,22 +1,29 @@
 import 'package:dio/dio.dart';
-import 'package:helloworld/AuthorModel.dart';
-import 'package:helloworld/GenreModel.dart';
-import 'package:helloworld/TokenService.dart';
-import 'package:helloworld/book.model.dart';
+import 'package:helloworld/Models/AuthorModel.dart';
+import 'package:helloworld/Models/GenreModel.dart';
+import 'package:helloworld/API/TokenService.dart';
+import 'package:helloworld/Models/book.model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
+  Future<String?> getJwtToken() async {
+    return await TokenService().getToken();
+  }
+
+  Future<Map<String, dynamic>> getHeaders() async {
+    Map<String, dynamic> headers = {
+      "Authorization": "Bearer ${await getJwtToken()}",
+      "Content-Type": "application/json"
+    };
+    return headers;
+  }
+
   Future<List<Book>> getBooks() async {
     try {
       Dio dio = Dio();
 
-      Map<String, dynamic> headers = {
-        "Authorization": "Bearer ${await TokenService().getToken()}",
-        "Content-Type": "application/json"
-      };
-
       var response = await dio.get('https://localhost:7035/api/Books',
-          options: Options(headers: headers));
+          options: Options(headers: await getHeaders()));
 
       List<Map<String, dynamic>> jsonData =
           List<Map<String, dynamic>>.from(response.data);
@@ -37,13 +44,8 @@ class ApiService {
     try {
       Dio dio = Dio();
 
-      Map<String, dynamic> headers = {
-        "Authorization": "Bearer ${await TokenService().getToken()}",
-        "Content-Type": "application/json"
-      };
-
       var response = await dio.get('https://localhost:7035/api/Authors',
-          options: Options(headers: headers));
+          options: Options(headers: await getHeaders()));
 
       List<Map<String, dynamic>> jsonData =
           List<Map<String, dynamic>>.from(response.data);
@@ -60,17 +62,12 @@ class ApiService {
     }
   }
 
-   Future<List<Genre>> getAllGenres() async {
+  Future<List<Genre>> getAllGenres() async {
     try {
       Dio dio = Dio();
 
-      Map<String, dynamic> headers = {
-        "Authorization": "Bearer ${await TokenService().getToken()}",
-        "Content-Type": "application/json"
-      };
-
       var response = await dio.get('https://localhost:7035/api/Genres',
-          options: Options(headers: headers));
+          options: Options(headers: await getHeaders()));
 
       List<Map<String, dynamic>> jsonData =
           List<Map<String, dynamic>>.from(response.data);
@@ -87,19 +84,16 @@ class ApiService {
     }
   }
 
-
   Future<String> deleteBook(int id) async {
-    final Map<String, String> headers = {
+    var url = Uri.parse('https://localhost:7035/api/Books/$id');
+
+    var response = await http.delete(url, headers: {
       "Authorization": "Bearer ${await TokenService().getToken()}",
       "Content-Type": "application/json"
-    };
-
-    var url = Uri.parse('https://localhost:7035/api/Books/${id}');
-
-    var response = await http.delete(url, headers: headers);
+    });
 
     if (response.statusCode == 204) {
-      return "Book with ID: ${id} deleted successfully";
+      return "Book with ID: $id deleted successfully";
     } else {
       throw Exception('Failed to delete book');
     }

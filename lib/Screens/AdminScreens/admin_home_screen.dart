@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helloworld/CreateBookPage.dart';
-import 'package:helloworld/ShowAllBooksPage.dart';
+import 'package:helloworld/Screens/AdminScreens/create_book_page.dart';
+import 'package:helloworld/Screens/AdminScreens/show_all_books_page.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});

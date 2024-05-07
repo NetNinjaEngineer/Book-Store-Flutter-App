@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:helloworld/book.model.dart';
+import 'package:helloworld/Models/book.model.dart';
 
 class BookCardComponent extends StatelessWidget {
   final Book book;
@@ -14,12 +14,11 @@ class BookCardComponent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image in the first row
-            Container(
+            SizedBox(
               height: 200,
               width: double.infinity,
               child: Image.network(
-                book.imageUrl ??
-                    '',
+                book.imageUrl,
                 fit: BoxFit.cover,
               ),
             ),

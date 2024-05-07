@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:helloworld/TokenService.dart';
+import 'package:helloworld/API/TokenService.dart';
 import 'package:http/http.dart' as http;
 import 'package:form_validator/form_validator.dart';
 
@@ -29,9 +28,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
       final Map<String, dynamic> userData = {
         'firstName':
-            name.split(' ')[0], // Assuming first name comes before last name
+            name.split(' ')[0],
         'lastName': name.split(' ').length > 1 ? name.split(' ')[1] : '',
-        'username': email, // Using email as username
+        'username': email,
         'email': email,
         'password': password,
       };
@@ -106,7 +105,8 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _confirmPasswordController,
-                decoration: const InputDecoration(labelText: 'Confirm Password'),
+                decoration:
+                    const InputDecoration(labelText: 'Confirm Password'),
                 obscureText: true,
                 validator: (value) {
                   if (value != _passwordController.text) {
@@ -127,5 +127,3 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-
-class FlutterSecureStorage {}

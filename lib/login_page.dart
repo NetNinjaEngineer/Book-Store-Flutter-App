@@ -1,8 +1,8 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:helloworld/AdminHomeScreen.dart';
-import 'package:helloworld/BookListScreen.dart';
-import 'package:helloworld/TokenService.dart';
+import 'package:helloworld/Screens/AdminScreens/admin_home_screen.dart';
+import 'package:helloworld/Screens/UserScreens/book_list_screen.dart';
+import 'package:helloworld/API/TokenService.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:form_validator/form_validator.dart';

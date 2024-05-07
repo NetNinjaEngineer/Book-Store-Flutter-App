@@ -12,11 +12,13 @@ dependencies:
   form_validator: ^2.1.1
   provider: ^6.1.2
   http: ^0.13.5
-  flutter_secure_storage: ^9.0.0
   dio: ^5.4.3+1
   shared_preferences: ^2.0.10
-  image_picker:
+  image_picker: ^1.1.1
   file_utils:
+  modal_progress_hud_nsn: ^0.5.0
+  universal_html: ^2.2.4
+  image_picker_web: ^3.1.1
 
 dev_dependencies:
   flutter_test:

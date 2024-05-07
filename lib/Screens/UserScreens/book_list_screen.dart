@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:helloworld/ApiService.dart';
-import 'package:helloworld/BookListView.dart';
-import 'package:helloworld/book.model.dart';
+import 'package:helloworld/API/ApiService.dart';
+import 'package:helloworld/Screens/UserScreens/book_list_view.dart';
+import 'package:helloworld/Models/book.model.dart';
 
 class BookListScreen extends StatefulWidget {
   const BookListScreen({super.key});

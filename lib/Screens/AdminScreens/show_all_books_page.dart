@@ -1,7 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:helloworld/ApiService.dart';
-import 'package:helloworld/book.model.dart';
+import 'package:helloworld/API/ApiService.dart';
+import 'package:helloworld/Models/book.model.dart';
 
 class ShowAllBooksPage extends StatefulWidget {
   const ShowAllBooksPage({super.key});
