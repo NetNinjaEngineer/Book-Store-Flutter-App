@@ -50,7 +50,7 @@ class AdminHomeScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
               child: const Text('Show All Books'),
-            ),
+            )
           ],
         ),
       ),

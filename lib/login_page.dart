@@ -95,22 +95,20 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
                 PasswordInput(controller: _passwordController),
                 const SizedBox(height: 20),
-                _isLoading
-                    ? const CircularProgressIndicator() // Show loading indicator
-                    : ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            String email = _emailController.text;
-                            String password = _passwordController.text;
-                            await _loginUser(email, password);
-                          }
-                        },
-                        child: Text('Login'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                        ),
-                      ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      String email = _emailController.text;
+                      String password = _passwordController.text;
+                      await _loginUser(email, password);
+                    }
+                  },
+                  child: Text('Login'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {

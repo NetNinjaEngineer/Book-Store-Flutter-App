@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:helloworld/API/ApiService.dart';
+import 'package:helloworld/cubit/books_cubit.dart';
 import 'package:helloworld/login_page.dart';
 
 void main() {
@@ -10,12 +13,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Book store App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const LoginPage());
+    return BlocProvider(
+        create: (context) => BooksCubit(ApiService()),
+        child: const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Book store',
+            home: LoginPage()));
   }
 }
