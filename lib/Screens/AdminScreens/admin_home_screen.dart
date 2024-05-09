@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:helloworld/API/TokenService.dart';
 import 'package:helloworld/Screens/AdminScreens/create_book_page.dart';
 import 'package:helloworld/Screens/AdminScreens/show_all_books_page.dart';
+import 'package:helloworld/Screens/AuthScreens/login_page.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
@@ -9,9 +11,32 @@ class AdminHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Page'),
-        backgroundColor: Colors.lightBlue,
-      ),
+          title: const Text('Admin Page'),
+          backgroundColor: Colors.lightBlue,
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                await TokenService().removeToken();
+
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return const LoginPage();
+                }));
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              ),
+              child: const Text('Logout'),
+            )
+          ]),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

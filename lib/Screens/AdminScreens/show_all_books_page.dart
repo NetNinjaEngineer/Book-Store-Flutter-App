@@ -24,6 +24,28 @@ class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
     });
   }
 
+  Future<bool?> showConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool?>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Confirm'),
+          content: const Text('Are you sure you want to delete this?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,16 +78,22 @@ class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
                     Builder(builder: (context) {
                       return IconButton(
                           onPressed: () async {
-                            var message = await ApiService()
-                                .deleteBook(state.books[index].bookId);
-                            if (message.isNotEmpty) {
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(message),
-                                  duration: const Duration(seconds: 1),
-                                ),
-                              );
+                            final confirmed =
+                                await showConfirmationDialog(context);
+
+                            if (confirmed == true) {
+                              var message = await ApiService()
+                                  .deleteBook(state.books[index].bookId);
+
+                              if (message.isNotEmpty) {
+                                // ignore: use_build_context_synchronously
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(message),
+                                    duration: const Duration(seconds: 1),
+                                  ),
+                                );
+                              }
                             } else {}
                           },
                           icon: const Icon(
@@ -83,9 +111,7 @@ class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
             );
           } else if (state is ErrorBookState) {
             return Center(child: Text(state.message));
-          }
-
-          else if (state is OnUpdatedBookState) {
+          } else if (state is OnUpdatedBookState) {
             return ListView.separated(
               itemBuilder: (context, index) {
                 return ListTile(
