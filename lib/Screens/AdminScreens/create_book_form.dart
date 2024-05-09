@@ -4,13 +4,13 @@ import 'package:helloworld/API/ApiService.dart';
 import 'package:helloworld/API/TokenService.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
-import 'package:image_picker_web/image_picker_web.dart';
 import 'package:http_parser/http_parser.dart';
 
 class CreateBookForm extends StatefulWidget {
   const CreateBookForm({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _BookFormState createState() => _BookFormState();
 }
 
@@ -35,10 +35,6 @@ class _BookFormState extends State<CreateBookForm> {
     getGenreNames();
   }
 
-  // Future<Uint8List?> pickImage() async {
-  //   Uint8List? bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-  //   return bytesFromPicker;
-  // }
 
   Future<void> _pickImage() async {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
@@ -65,13 +61,6 @@ class _BookFormState extends State<CreateBookForm> {
       }
     });
   }
-
-  // void _pickImage() async {
-  //   Uint8List? image = await pickImage();
-  //   setState(() {
-  //     _pickedImage = image;
-  //   });
-  // }
 
   Future<void> getGenreNames() async {
     try {
@@ -141,7 +130,6 @@ class _BookFormState extends State<CreateBookForm> {
 
       // Check if image upload was successful
       if (response.statusCode == 422) {
-        // If the status code is 422, print the response body for debugging
         print('Received 422 Unprocessable Entity response');
         print('Response body: ${await response.stream.bytesToString()}');
       } else if (response.statusCode == 201) {

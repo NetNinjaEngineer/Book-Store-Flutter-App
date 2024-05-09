@@ -3,9 +3,9 @@ class Book {
   final List<String> authors;
   final String genre;
   final String imageUrl;
-  final String title;
-  final int publicationYear;
-  final double price;
+  String title;
+  int publicationYear;
+  double price;
 
   Book({
     required this.bookId,

@@ -1,7 +1,11 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helloworld/API/ApiService.dart';
 import 'package:helloworld/Models/book.model.dart';
+import 'package:helloworld/Screens/AdminScreens/EditBookPage.dart';
+import 'package:helloworld/cubit/book_states.dart';
+import 'package:helloworld/cubit/books_cubit.dart';
 
 class ShowAllBooksPage extends StatefulWidget {
   const ShowAllBooksPage({super.key});
@@ -11,11 +15,13 @@ class ShowAllBooksPage extends StatefulWidget {
 }
 
 class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
-  var future;
   @override
   void initState() {
     super.initState();
-    future = ApiService().getBooks();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<BooksCubit>();
+      cubit.fetchAllBooks();
+    });
   }
 
   @override
@@ -24,64 +30,112 @@ class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
         appBar: AppBar(
           title: const Text('All Books'),
         ),
-        body: FutureBuilder<List<Book>>(
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (snapshot.hasData) {
-              return ListView.separated(
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Image.network(
-                        snapshot.data![index].imageUrl.toString()),
-                    title: Text(snapshot.data![index].title.toString()),
-                    subtitle: Text('${snapshot.data![index].price} \$ '),
-                    trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                      IconButton(
-                          onPressed: () => {},
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Colors.yellow,
-                          )),
-                      Builder(builder: (context) {
-                        return IconButton(
-                            onPressed: () async {
-                              var message = await ApiService()
-                                  .deleteBook(snapshot.data![index].bookId);
-                              if (message.isNotEmpty) {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(message),
-                                    duration: const Duration(seconds: 1),
-                                  ),
-                                );
-                              } else {}
+        body: BlocBuilder<BooksCubit, BookState>(builder: (context, state) {
+          if (state is InitBookState || state is LoadingBookState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ResponseBookState) {
+            return ListView.separated(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading:
+                      Image.network(state.books[index].imageUrl.toString()),
+                  title: Text(state.books[index].title.toString()),
+                  subtitle: Text('${state.books[index].price} \$ '),
+                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                    IconButton(
+                        onPressed: () => {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return EditBookPage(book: state.books[index]);
+                              }))
                             },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ));
-                      })
-                    ]),
-                  );
-                },
-                itemCount: snapshot.data!.length,
-                separatorBuilder: (context, index) {
-                  return const Divider();
-                },
-              );
-            } else {
-              return const Center(
-                child: Text('There is no data loaded'),
-              );
-            }
-          },
-          future: future,
-        ));
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.yellow,
+                        )),
+                    Builder(builder: (context) {
+                      return IconButton(
+                          onPressed: () async {
+                            var message = await ApiService()
+                                .deleteBook(state.books[index].bookId);
+                            if (message.isNotEmpty) {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message),
+                                  duration: const Duration(seconds: 1),
+                                ),
+                              );
+                            } else {}
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ));
+                    })
+                  ]),
+                );
+              },
+              itemCount: state.books.length,
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            );
+          } else if (state is ErrorBookState) {
+            return Center(child: Text(state.message));
+          }
+
+          else if (state is OnUpdatedBookState) {
+            return ListView.separated(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading:
+                      Image.network(state.newList[index].imageUrl.toString()),
+                  title: Text(state.newList[index].title.toString()),
+                  subtitle: Text('${state.newList[index].price} \$ '),
+                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                    IconButton(
+                        onPressed: () => {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return EditBookPage(book: state.newList[index]);
+                              }))
+                            },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.yellow,
+                        )),
+                    Builder(builder: (context) {
+                      return IconButton(
+                          onPressed: () async {
+                            var message = await ApiService()
+                                .deleteBook(state.newList[index].bookId);
+                            if (message.isNotEmpty) {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message),
+                                  duration: const Duration(seconds: 1),
+                                ),
+                              );
+                            } else {}
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ));
+                    })
+                  ]),
+                );
+              },
+              itemCount: state.newList.length,
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            );
+          }
+
+          return const Center(child: Text('Something went wrong...'));
+        }));
   }
 }

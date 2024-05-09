@@ -15,3 +15,13 @@ class ErrorBookState extends BookState {
   String message;
   ErrorBookState(this.message);
 }
+
+class OnUpdatedBookState extends BookState {
+  List<Book> newList;
+  OnUpdatedBookState(this.newList);
+}
+
+class OnUpdatedBookErrorState extends BookState {
+  String message;
+  OnUpdatedBookErrorState(this.message);
+}

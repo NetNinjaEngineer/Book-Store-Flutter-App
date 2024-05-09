@@ -10,6 +10,7 @@ class AdminHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Page'),
+        backgroundColor: Colors.lightBlue,
       ),
       body: Center(
         child: Column(
