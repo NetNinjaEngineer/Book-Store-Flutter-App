@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:helloworld/API/TokenService.dart';
+import 'package:helloworld/helpers/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:form_validator/form_validator.dart';
 
@@ -34,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'password': password,
       };
 
-      final Uri url = Uri.parse('https://localhost:7035/api/Auth/Register');
+      final Uri url = Uri.parse('${Config.baseUrl}/api/Auth/Register');
       final response = await http.post(
         url,
         headers: <String, String>{
@@ -48,8 +49,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
         await TokenService().storeToken(responseData['token']);
 
+        // Navigate back to the login page
         // ignore: use_build_context_synchronously
-        Navigator.pop(context); // Navigate back to the login page
+        Navigator.pop(context);
       } else {
         // Registration failed
         // ignore: use_build_context_synchronously
@@ -69,83 +71,81 @@ class _RegisterPageState extends State<RegisterPage> {
         title: const Text('Sign Up'),
         backgroundColor: Colors.blue,
       ),
-      body: Container(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network(
-                    'https://source.unsplash.com/200x200/?books,library,reading',
-                    height: 100,
-                    width: 100,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(
+                  'https://source.unsplash.com/200x200/?books,library,reading',
+                  height: 100,
+                  width: 100,
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    prefixIcon: Icon(Icons.person),
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                    validator: ValidationBuilder()
-                        .required('Please enter your name')
-                        .build(),
+                  validator: ValidationBuilder()
+                      .required('Please enter your name')
+                      .build(),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
-                    ),
-                    validator: ValidationBuilder()
-                        .email('Please enter a valid email')
-                        .required('Please enter your email')
-                        .build(),
+                  validator: ValidationBuilder()
+                      .email('Please enter a valid email')
+                      .required('Please enter your email')
+                      .build(),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                    obscureText: true,
-                    validator: ValidationBuilder()
-                        .required('Please enter your password')
-                        .minLength(
-                            6, 'Password must be at least 6 characters long')
-                        .build(),
+                  obscureText: true,
+                  validator: ValidationBuilder()
+                      .required('Please enter your password')
+                      .minLength(
+                          6, 'Password must be at least 6 characters long')
+                      .build(),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Confirm Password',
+                    prefixIcon: Icon(Icons.lock),
                   ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value != _passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
+                  obscureText: true,
+                  validator: (value) {
+                    if (value != _passwordController.text) {
+                      return 'Passwords do not match';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _registerUser,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _registerUser,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('Sign Up'),
-                  ),
-                ],
-              ),
+                  child: const Text('Sign Up'),
+                ),
+              ],
             ),
           ),
         ),

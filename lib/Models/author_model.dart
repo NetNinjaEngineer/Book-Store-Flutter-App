@@ -1,4 +1,3 @@
-// ignore: file_names
 class Author {
   final int id;
   final String authorName;

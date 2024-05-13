@@ -1,9 +1,9 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:helloworld/API/ApiService.dart';
+import 'package:helloworld/API/api_service.dart';
 import 'package:helloworld/Models/book.model.dart';
-import 'package:helloworld/Screens/AdminScreens/EditBookPage.dart';
+import 'package:helloworld/Screens/AdminScreens/edit_book_page.dart';
 import 'package:helloworld/cubit/book_states.dart';
 import 'package:helloworld/cubit/books_cubit.dart';
 
@@ -80,20 +80,9 @@ class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
                           onPressed: () async {
                             final confirmed =
                                 await showConfirmationDialog(context);
-
                             if (confirmed == true) {
-                              var message = await ApiService()
-                                  .deleteBook(state.books[index].bookId);
-
-                              if (message.isNotEmpty) {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(message),
-                                    duration: const Duration(seconds: 1),
-                                  ),
-                                );
-                              }
+                              BooksCubit cubit = BlocProvider.of(context);
+                              cubit.onDeleteBook(state.books[index].bookId);
                             } else {}
                           },
                           icon: const Icon(
@@ -134,16 +123,11 @@ class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
                     Builder(builder: (context) {
                       return IconButton(
                           onPressed: () async {
-                            var message = await ApiService()
-                                .deleteBook(state.newList[index].bookId);
-                            if (message.isNotEmpty) {
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(message),
-                                  duration: const Duration(seconds: 1),
-                                ),
-                              );
+                            final confirmed =
+                                await showConfirmationDialog(context);
+                            if (confirmed == true) {
+                              BooksCubit cubit = BlocProvider.of(context);
+                              cubit.onDeleteBook(state.newList[index].bookId);
                             } else {}
                           },
                           icon: const Icon(
@@ -159,9 +143,52 @@ class _ShowAllBooksPageState extends State<ShowAllBooksPage> {
                 return const Divider();
               },
             );
+          } else if (state is OnDeletedBookState) {
+            return ListView.separated(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading:
+                      Image.network(state.newList[index].imageUrl.toString()),
+                  title: Text(state.newList[index].title.toString()),
+                  subtitle: Text('${state.newList[index].price} \$ '),
+                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                    IconButton(
+                        onPressed: () => {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return EditBookPage(book: state.newList[index]);
+                              }))
+                            },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.yellow,
+                        )),
+                    Builder(builder: (context) {
+                      return IconButton(
+                          onPressed: () async {
+                            final confirmed =
+                                await showConfirmationDialog(context);
+                            if (confirmed == true) {
+                              BooksCubit cubit = BlocProvider.of(context);
+                              cubit.onDeleteBook(state.newList[index].bookId);
+                            } else {}
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ));
+                    })
+                  ]),
+                );
+              },
+              itemCount: state.newList.length,
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            );
+          } else {
+            return const Center(child: Text('Something went wrong...'));
           }
-
-          return const Center(child: Text('Something went wrong...'));
         }));
   }
 }

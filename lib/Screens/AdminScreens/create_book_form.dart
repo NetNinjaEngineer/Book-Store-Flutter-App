@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:helloworld/API/ApiService.dart';
+import 'package:helloworld/API/api_service.dart';
 import 'package:helloworld/API/TokenService.dart';
+import 'package:helloworld/helpers/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 import 'package:http_parser/http_parser.dart';
@@ -34,7 +35,6 @@ class _BookFormState extends State<CreateBookForm> {
     getAuthorNames();
     getGenreNames();
   }
-
 
   Future<void> _pickImage() async {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
@@ -102,7 +102,7 @@ class _BookFormState extends State<CreateBookForm> {
 
   Future<http.StreamedResponse> uploadImage() async {
     var jwtToken = await TokenService().getToken();
-    var url = Uri.parse('https://localhost:7035/api/Books');
+    var url = Uri.parse('${Config.baseUrl}/api/Books');
 
     var request = http.MultipartRequest('POST', url);
 
@@ -244,11 +244,17 @@ class _BookFormState extends State<CreateBookForm> {
                 height: 10,
               ),
               ElevatedButton(
-                onPressed: () async {
-                  await _submitForm();
-                },
-                child: const Text('Submit'),
-              ),
+                  onPressed: () async {
+                    await _submitForm();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(300, 60),
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.all(10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  child: const Text('Submit'))
             ],
           ),
         ),

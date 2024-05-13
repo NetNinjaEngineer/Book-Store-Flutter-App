@@ -25,3 +25,18 @@ class OnUpdatedBookErrorState extends BookState {
   String message;
   OnUpdatedBookErrorState(this.message);
 }
+
+class OnDeletedBookState extends BookState {
+  List<Book> newList;
+  OnDeletedBookState(this.newList);
+}
+
+class OnDeletedBookErrorState extends BookState {
+  String message;
+  OnDeletedBookErrorState(this.message);
+}
+
+class OnSearchedBooksState extends BookState {
+  List<Book> books;
+  OnSearchedBooksState(this.books);
+}

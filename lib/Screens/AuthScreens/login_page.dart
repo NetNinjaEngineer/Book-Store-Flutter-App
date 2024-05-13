@@ -6,6 +6,7 @@ import 'package:helloworld/API/TokenService.dart';
 import 'package:helloworld/Screens/AdminScreens/admin_home_screen.dart';
 import 'package:helloworld/Screens/AuthScreens/signup.dart';
 import 'package:helloworld/Screens/UserScreens/book_list_screen.dart';
+import 'package:helloworld/helpers/config.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       'password': password,
     };
 
-    final Uri url = Uri.parse('https://localhost:7035/api/Auth/Login');
+    final Uri url = Uri.parse('${Config.baseUrl}/api/Auth/Login');
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -81,72 +82,64 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Book store'),
         backgroundColor: Colors.blue,
       ),
-      body: Container(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Image.network(
-                  //   'https://plus.unsplash.com/premium_photo-1703701580104-43fb3013075a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                  //   height: 100,
-                  //   width: 100,
-                  // ),
-                  const SizedBox(height: 20),
-                  EmailInput(controller: _emailController),
-                  const SizedBox(height: 20),
-                  PasswordInput(controller: _passwordController),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        String email = _emailController.text;
-                        String password = _passwordController.text;
-                        await _loginUser(email, password);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      minimumSize: Size(200, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Welcome from our book store", style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                )),
+                // Image.network(
+                //   'https://plus.unsplash.com/premium_photo-1703701580104-43fb3013075a?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                //   height: 100,
+                //   width: 100,
+                // ),
+                const SizedBox(height: 20),
+                EmailInput(controller: _emailController),
+                const SizedBox(height: 20),
+                PasswordInput(controller: _passwordController),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      String email = _emailController.text;
+                      String password = _passwordController.text;
+                      await _loginUser(email, password);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(200, 60),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: const Text('Login', style: TextStyle(fontSize: 20)),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterPage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(200, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                    ),
-                    child:
-                        const Text('Register', style: TextStyle(fontSize: 20)),
-                  )
-                ],
-              ),
+                  child: const Text('Login', style: TextStyle(fontSize: 20)),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterPage()),
+                    );
+                  },
+                  child:
+                      const Text('Not have an account ?? Register Now .', style: TextStyle(fontSize: 15)),
+                )
+              ],
             ),
           ),
         ),
